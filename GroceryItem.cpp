@@ -28,20 +28,12 @@ namespace    // unnamed, anonymous namespace
   constexpr bool floating_point_is_equal( T const lhs,  U const rhs,  long double const EPSILON1 = /*1e-12L*/ 1e-4L,  long double const EPSILON2 = 1e-8L ) noexcept
   {
     ///////////////////////// TO-DO (1) //////////////////////////////
-      ///  Write the lines of code that compare two floating point numbers.  Return true when the left hand side (lhs) and the right
-      ///  hand side (rhs) are within Epsilon, and false otherwise.
-      ///
-      ///  See: "Floating point equality" in
-      ///       https://www.learncpp.com/cpp-tutorial/relational-operators-and-floating-point-comparisons/
-      ///
-      ///  Hint:  Avoid writing code that looks like:
-      ///           if( some expression ) return true;
-      ///           else                 return false;
-      ///         Instead:
-      ///           return some_expression;
-
-      return (std::fabsl(lhs - rhs) <= EPSILON1)
-          || (std::fabsl(lhs - rhs) <= (EPSILON2 * std::max(std::fabsl(lhs), std::fabsl(rhs))));
+    {
+    // Avoid multiple calls to abs(...) or max(...). Use local variables:
+    long double diff   = std::abs(lhs - rhs);
+    long double larger = std::max(std::abs(lhs), std::abs(rhs));
+    return (diff <= EPSILON1) || (diff <= (EPSILON2 * larger));
+}
     /////////////////////// END-TO-DO (1) ////////////////////////////
   }
 }    // unnamed, anonymous namespace
@@ -319,10 +311,13 @@ bool GroceryItem::operator==( const GroceryItem & rhs ) const noexcept
   // quickest and then the most likely to be different first.
 
   ///////////////////////// TO-DO (20) //////////////////////////////
-  return  (_upcCode     == rhs._upcCode)
-       && (_productName == rhs._productName)
-       && (_brandName   == rhs._brandName)
-       && floating_point_is_equal(_price, rhs._price);
+{
+    // Compare price first (O(1)), then upcCode (short string), then brandName, then productName
+    return  floating_point_is_equal(_price, rhs._price)
+         && (_upcCode     == rhs._upcCode)
+         && (_brandName   == rhs._brandName)
+         && (_productName == rhs._productName);
+}
   /////////////////////// END-TO-DO (20) ////////////////////////////
 }
 
