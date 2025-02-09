@@ -387,9 +387,9 @@ std::istream & operator>>( std::istream & stream, GroceryItem & groceryItem )
 
 
 // operator<<(...)
+  ///////////////////////// TO-DO (22) //////////////////////////////
 std::ostream & operator<<( std::ostream & stream, GroceryItem const & groceryItem )
 {
-  ///////////////////////// TO-DO (22) //////////////////////////////
            << ", "
            << std::quoted(groceryItem.brandName())
            << ", "
