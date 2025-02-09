@@ -376,7 +376,7 @@ std::istream & operator>>( std::istream & stream, GroceryItem & groceryItem )
 }
 
 // operator<<(...)
-std::ostream & operator<<( std::ostream & stream, GroceryItem const & groceryItem )
+std::ostream & operator<<( std::ostream & stream, const GroceryItem & groceryItem )
 {
   ///////////////////////// TO-DO (22) //////////////////////////////
            << ", "
