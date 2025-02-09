@@ -57,11 +57,11 @@ namespace    // unnamed, anonymous namespace
 *******************************************************************************/
 
 // Default and Conversion Constructor
+///////////////////////// TO-DO (2) //////////////////////////////
 GroceryItem::GroceryItem( std::string productName,
                           std::string brandName,
                           std::string upcCode,
                           double      price )
-///////////////////////// TO-DO (2) //////////////////////////////
   : _productName(std::move(productName)),
     _brandName(std::move(brandName)),
     _upcCode(std::move(upcCode)),
