@@ -170,9 +170,8 @@ std::string const & GroceryItem::productName() const &
   /////////////////////// END-TO-DO (10) ////////////////////////////
 
 
-
-  ///////////////////////// TO-DO (11) //////////////////////////////
 // price() const    (L-value and, because there is no R-value overload, R-value objects)
+  ///////////////////////// TO-DO (11) //////////////////////////////
 double GroceryItem::price() const &
 {
   return _price;
@@ -182,9 +181,8 @@ double GroceryItem::price() const &
 
 
 
-
-  ///////////////////////// TO-DO (12) //////////////////////////////
 // upcCode()    (R-value objects)
+  ///////////////////////// TO-DO (12) //////////////////////////////
 std::string GroceryItem::upcCode() &&
 {
   return std::move(_upcCode);
@@ -227,9 +225,8 @@ GroceryItem & GroceryItem::upcCode( std::string newUpcCode ) &
   ///////////////////////// TO-DO (15) //////////////////////////////
   _upcCode = std::move(newUpcCode);
   return *this;
-}
   /////////////////////// END-TO-DO (15) ////////////////////////////
-
+}
 
 // brandName(...)
 ///////////////////////// TO-DO (16) //////////////////////////////
@@ -247,9 +244,8 @@ GroceryItem & GroceryItem::productName( std::string newProductName ) &
 {
   _productName = std::move(newProductName);
   return *this;
-}
 /////////////////////// END-TO-DO (17) ////////////////////////////
-
+}
 
 // price(...)
 ///////////////////////// TO-DO (18) //////////////////////////////
@@ -385,9 +381,8 @@ std::istream & operator>>( std::istream & stream, GroceryItem & groceryItem )
     stream.setstate(std::ios::failbit);
   }
   return stream;
-}
   /////////////////////// END-TO-DO (21) ////////////////////////////
-
+}
 
 
 
@@ -395,19 +390,12 @@ std::istream & operator>>( std::istream & stream, GroceryItem & groceryItem )
   ///////////////////////// TO-DO (22) //////////////////////////////
 std::ostream & operator<<( std::ostream & stream, GroceryItem const & groceryItem )
 {
-    /// This function should be symmetrical with operator>> above.  Read what you write, and write what you read
-    ///
-    /// Hint:  Brand and product names may have quotes, which need to escaped when printing.  Use std::quoted to read and write quoted strings.  See
-    ///        1) https://en.cppreference.com/w/cpp/io/manip/quoted
-    ///        2) https://www.youtube.com/watch?v=Mu-GUZuU31A
-
-  stream << std::quoted(groceryItem.upcCode())
-         << ", "
-         << std::quoted(groceryItem.brandName())
-         << ", "
-         << std::quoted(groceryItem.productName())
-         << ", "
-         << groceryItem.price();
+           << ", "
+           << std::quoted(groceryItem.brandName())
+           << ", "
+           << std::quoted(groceryItem.productName())
+           << ", "
+           << groceryItem.price();
   return stream;
   /////////////////////// END-TO-DO (22) ////////////////////////////
 }
