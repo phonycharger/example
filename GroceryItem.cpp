@@ -176,8 +176,9 @@ std::string const & GroceryItem::productName() const &
 double GroceryItem::price() const &
 {
   return _price;
-  /////////////////////// END-TO-DO (11) ////////////////////////////
 }
+  /////////////////////// END-TO-DO (11) ////////////////////////////
+
 
 
 
@@ -231,8 +232,8 @@ GroceryItem & GroceryItem::upcCode( std::string newUpcCode ) &
 
 
 // brandName(...)
-GroceryItem & GroceryItem::brandName( std::string newBrandName ) &
 ///////////////////////// TO-DO (16) //////////////////////////////
+GroceryItem & GroceryItem::brandName( std::string newBrandName ) &
 {
   _brandName = std::move(newBrandName);
   return *this;
@@ -384,8 +385,9 @@ std::istream & operator>>( std::istream & stream, GroceryItem & groceryItem )
     stream.setstate(std::ios::failbit);
   }
   return stream;
-  /////////////////////// END-TO-DO (21) ////////////////////////////
 }
+  /////////////////////// END-TO-DO (21) ////////////////////////////
+
 
 
 
