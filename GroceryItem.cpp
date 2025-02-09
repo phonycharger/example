@@ -28,7 +28,21 @@ namespace    // unnamed, anonymous namespace
   constexpr bool floating_point_is_equal( T const lhs,  U const rhs,  long double const EPSILON1 = /*1e-12L*/ 1e-4L,  long double const EPSILON2 = 1e-8L ) noexcept
   {
     ///////////////////////// TO-DO (1) //////////////////////////////
-      return (std::fabsl(lhs - rhs) <= EPSILON1) 
+      ///  Write the lines of code that compare two floating point numbers.  Return true when the left hand side (lhs) and the right
+      ///  hand side (rhs) are within Epsilon, and false otherwise.
+      ///
+      ///  See: "Floating point equality" in https://www.learncpp.com/cpp-tutorial/relational-operators-and-floating-point-comparisons/
+      ///
+      ///  Hint:  Avoid writing code that looks like this:
+      ///           if( some expression that is true ) return the constant "true"
+      ///           else                               return the constant "false"
+      ///         for example, avoid:
+      ///           if (a < b) return true;
+      ///           else       return false;
+      ///         do this instead:
+      ///           return a < b;
+
+      return (std::fabsl(lhs - rhs) <= EPSILON1)
           || (std::fabsl(lhs - rhs) <= (EPSILON2 * std::max(std::fabsl(lhs), std::fabsl(rhs))));
     /////////////////////// END-TO-DO (1) ////////////////////////////
   }
@@ -45,14 +59,17 @@ namespace    // unnamed, anonymous namespace
 *******************************************************************************/
 
 // Default and Conversion Constructor
-GroceryItem::GroceryItem( std::string productName, std::string brandName, std::string upcCode, double price )
+GroceryItem::GroceryItem( std::string productName,
+                          std::string brandName,
+                          std::string upcCode,
+                          double      price )
 ///////////////////////// TO-DO (2) //////////////////////////////
   : _productName(std::move(productName)),
     _brandName(std::move(brandName)),
     _upcCode(std::move(upcCode)),
     _price(price)
 /////////////////////// END-TO-DO (2) ////////////////////////////
-{}
+{}                                                                    // Avoid setting values in constructor's body (when possible)
 
 
 // Copy constructor
@@ -63,7 +80,7 @@ GroceryItem::GroceryItem( GroceryItem const & other )
     _productName(other._productName),
     _price(other._price)
 /////////////////////// END-TO-DO (3) ////////////////////////////
-{}
+{}                                                                    // Avoid setting values in constructor's body (when possible)
 
 
 // Move constructor
@@ -81,7 +98,7 @@ GroceryItem::GroceryItem( GroceryItem && other ) noexcept
 GroceryItem & GroceryItem::operator=( GroceryItem const & rhs ) &
 {
   ///////////////////////// TO-DO (5) //////////////////////////////
-  if(this != &rhs)
+  if (this != &rhs)
   {
     _upcCode     = rhs._upcCode;
     _brandName   = rhs._brandName;
@@ -97,7 +114,7 @@ GroceryItem & GroceryItem::operator=( GroceryItem const & rhs ) &
 GroceryItem & GroceryItem::operator=( GroceryItem && rhs ) & noexcept
 ///////////////////////// TO-DO (6) //////////////////////////////
 {
-  if(this != &rhs)
+  if (this != &rhs)
   {
     _upcCode     = std::move(rhs._upcCode);
     _brandName   = std::move(rhs._brandName);
@@ -155,7 +172,7 @@ std::string const & GroceryItem::productName() const &
 }
 
 
-// price() const    (L-value and R-value objects)
+// price() const    (L-value and, because there is no R-value overload, R-value objects)
 double GroceryItem::price() const &
 {
   ///////////////////////// TO-DO (11) //////////////////////////////
@@ -247,7 +264,6 @@ GroceryItem & GroceryItem::price( double newPrice ) &
 
 
 
-
 /*******************************************************************************
 **  Relational Operators
 *******************************************************************************/
@@ -255,15 +271,41 @@ GroceryItem & GroceryItem::price( double newPrice ) &
 // operator<=>(...)
 std::weak_ordering GroceryItem::operator<=>( const GroceryItem & rhs ) const noexcept
 {
+  // Design decision:  A very simple and convenient defaulted 3-way comparison operator
+  //                         auto operator<=>( const GroceryItem & ) const = default;
+  //                   in the class definition (header file) would get very close to what is needed and would allow both the <=> and
+  //                   the == operators defined here to be skipped.  The physical ordering of the attributes in the class definition
+  //                   would have to be changed (easy enough in this case) but the default directly compares floating point types
+  //                   (price) for equality, and that should be avoided, in general. For example, if x and y are of type double,
+  //                   then  x < y  is okay but  x == y  is not.  So these (operator<=> and operator==) explicit definitions are
+  //                   provided.
+  //
+  //                   Also, many ordering (sorting) algorithms, like those used in std::map and std::set, require at least a weak
+  //                   ordering of elements. operator<=> provides only a partial ordering when comparing floating point numbers.
+  //
+  // Weak order:       Objects that compare equal but are not substitutable (identical).  For example, since _price can be within
+  //                   EPSILON, GroceryItem("ProductName", "BrandName", "UPC", 9.99999) and GroceryItem("ProductName", "BrandName",
+  //                   "UPC", 10.00001) are equal but they are not identical.  If you ignore case when comparing strings, as another
+  //                   example, GroceryItem("ProductName") and GroceryItem("productName") are equal but they are not identical.
+  //
+  // See std::weak_ordering    at https://en.cppreference.com/w/cpp/utility/compare/weak_ordering and
+  //     std::partial_ordering at https://en.cppreference.com/w/cpp/utility/compare/partial_ordering
+  //     The Three-Way Comparison Operator at  http://modernescpp.com/index.php/c-20-the-three-way-comparison-operator
+  //     Spaceship (Three way comparison) Operator Demystified https://youtu.be/S9ShnAFmiWM
+  //
+  //
+  // Grocery items are equal if all attributes are equal (or within Epsilon for floating point numbers, like price). Grocery items are ordered
+  // (sorted) by UPC code, product name, brand name, then price.
+
   ///////////////////////// TO-DO (19) //////////////////////////////
   auto cmpUpc = _upcCode <=> rhs._upcCode;
-  if(cmpUpc != 0) return cmpUpc;
+  if (cmpUpc != 0) return cmpUpc;
 
-  auto cmpProd = _productName <=> rhs._productName;
-  if(cmpProd != 0) return cmpProd;
+  auto cmpProduct = _productName <=> rhs._productName;
+  if (cmpProduct != 0) return cmpProduct;
 
   auto cmpBrand = _brandName <=> rhs._brandName;
-  if(cmpBrand != 0) return cmpBrand;
+  if (cmpBrand != 0) return cmpBrand;
 
   if( floating_point_is_equal(_price, rhs._price) )
     return std::weak_ordering::equivalent;
@@ -275,13 +317,17 @@ std::weak_ordering GroceryItem::operator<=>( const GroceryItem & rhs ) const noe
 // operator==(...)
 bool GroceryItem::operator==( const GroceryItem & rhs ) const noexcept
 {
+  // All attributes must be equal for the two grocery items to be equal to the other.  This can be done in any order, so put the
+  // quickest and then the most likely to be different first.
+
   ///////////////////////// TO-DO (20) //////////////////////////////
-  return _upcCode     == rhs._upcCode
-      && _productName == rhs._productName
-      && _brandName   == rhs._brandName
-      && floating_point_is_equal(_price, rhs._price);
+  return  (_upcCode     == rhs._upcCode)
+       && (_productName == rhs._productName)
+       && (_brandName   == rhs._brandName)
+       && floating_point_is_equal(_price, rhs._price);
   /////////////////////// END-TO-DO (20) ////////////////////////////
 }
+
 
 
 
@@ -294,11 +340,26 @@ bool GroceryItem::operator==( const GroceryItem & rhs ) const noexcept
 // operator>>(...)
 std::istream & operator>>( std::istream & stream, GroceryItem & groceryItem )
 {
-  char delimiter = '\x{00}';  // Not actually used except to show there's a variable
+  // A lot can go wrong when reading from streams - no permission, wrong types, end of file, etc. Minimal exception guarantee says
+  // there should be no side effects if an error or exception occurs, so let's do our work in a local object and move it into place
+  // at the end if all goes well.
+  //
+  // This function should be symmetrical with operator<< below.  Read what your write, and write what you read
+
+  char delimiter = '\x{00}';                                          // C++23 delimited escape sequence for the character whose value is zero (the null character)
   ///////////////////////// TO-DO (21) //////////////////////////////
+    /// Assume fields are separated by commas & optional spaces, and string attributes are enclosed with double quotes.  For example:
+    ///    UPC Code         | Brand Name | Product Name                                                  | Price
+    ///    -----------------+------------+---------------------------------------------------------------+-------
+    ///    "00034000020706",  "York",      "York Peppermint Patties Dark Chocolate Covered Snack Size"  ,  12.64
+    ///
+    /// Hint:  Use std::quoted to read and write quoted strings.  See
+    ///        1) https://en.cppreference.com/w/cpp/io/manip/quoted
+    ///        2) https://www.youtube.com/watch?v=Mu-GUZuU31A
+
   std::string upc, brand, product;
   double priceVal{};
-  if( stream 
+  if( stream
       >> std::ws
       >> std::quoted(upc)
       >> delimiter
@@ -311,7 +372,10 @@ std::istream & operator>>( std::istream & stream, GroceryItem & groceryItem )
       >> std::ws
       >> priceVal )
   {
-    GroceryItem temp{ std::move(product), std::move(brand), std::move(upc), priceVal };
+    GroceryItem temp( std::move(product),
+                      std::move(brand),
+                      std::move(upc),
+                      priceVal );
     groceryItem = std::move(temp);
   }
   else
@@ -325,9 +389,15 @@ std::istream & operator>>( std::istream & stream, GroceryItem & groceryItem )
 
 
 // operator<<(...)
-std::ostream & operator<<( std::ostream & stream, const GroceryItem & groceryItem )
+std::ostream & operator<<( std::ostream & stream, GroceryItem const & groceryItem )
 {
   ///////////////////////// TO-DO (22) //////////////////////////////
+    /// This function should be symmetrical with operator>> above.  Read what your write, and write what you read
+    ///
+    /// Hint:  Brand and product names may have quotes, which need to escaped when printing.  Use std::quoted to read and write quoted strings.  See
+    ///        1) https://en.cppreference.com/w/cpp/io/manip/quoted
+    ///        2) https://www.youtube.com/watch?v=Mu-GUZuU31A
+
   stream << std::quoted(groceryItem.upcCode())
          << ", "
          << std::quoted(groceryItem.brandName())
