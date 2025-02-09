@@ -346,15 +346,6 @@ std::istream & operator>>( std::istream & stream, GroceryItem & groceryItem )
 
   char delimiter = '\x{00}';                                          // C++23 delimited escape sequence for the character whose value is zero (the null character)
   ///////////////////////// TO-DO (21) //////////////////////////////
-    /// Assume fields are separated by commas & optional spaces, and string attributes are enclosed with double quotes.  For example:
-    ///    UPC Code         | Brand Name | Product Name                                                  | Price
-    ///    -----------------+------------+---------------------------------------------------------------+-------
-    ///    "00034000020706",  "York",      "York Peppermint Patties Dark Chocolate Covered Snack Size"  ,  12.64
-    ///
-    /// Hint:  Use std::quoted to read and write quoted strings.  See
-    ///        1) https://en.cppreference.com/w/cpp/io/manip/quoted
-    ///        2) https://www.youtube.com/watch?v=Mu-GUZuU31A
-
   std::string upc, brand, product;
   double priceVal{};
   if( stream
@@ -384,12 +375,10 @@ std::istream & operator>>( std::istream & stream, GroceryItem & groceryItem )
   /////////////////////// END-TO-DO (21) ////////////////////////////
 }
 
-
-
 // operator<<(...)
-  ///////////////////////// TO-DO (22) //////////////////////////////
 std::ostream & operator<<( std::ostream & stream, GroceryItem const & groceryItem )
 {
+  ///////////////////////// TO-DO (22) //////////////////////////////
            << ", "
            << std::quoted(groceryItem.brandName())
            << ", "
