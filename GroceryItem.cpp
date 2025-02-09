@@ -98,7 +98,7 @@ GroceryItem::GroceryItem( GroceryItem && other ) noexcept
 GroceryItem & GroceryItem::operator=( GroceryItem const & rhs ) &
 {
   ///////////////////////// TO-DO (5) //////////////////////////////
-  if (this != &rhs)
+  if(this != &rhs)
   {
     _upcCode     = rhs._upcCode;
     _brandName   = rhs._brandName;
@@ -114,7 +114,7 @@ GroceryItem & GroceryItem::operator=( GroceryItem const & rhs ) &
 GroceryItem & GroceryItem::operator=( GroceryItem && rhs ) & noexcept
 ///////////////////////// TO-DO (6) //////////////////////////////
 {
-  if (this != &rhs)
+  if(this != &rhs)
   {
     _upcCode     = std::move(rhs._upcCode);
     _brandName   = std::move(rhs._brandName);
@@ -299,13 +299,13 @@ std::weak_ordering GroceryItem::operator<=>( const GroceryItem & rhs ) const noe
 
   ///////////////////////// TO-DO (19) //////////////////////////////
   auto cmpUpc = _upcCode <=> rhs._upcCode;
-  if (cmpUpc != 0) return cmpUpc;
+  if( cmpUpc != 0 ) return cmpUpc;
 
-  auto cmpProduct = _productName <=> rhs._productName;
-  if (cmpProduct != 0) return cmpProduct;
+  auto cmpProd = _productName <=> rhs._productName;
+  if( cmpProd != 0 ) return cmpProd;
 
   auto cmpBrand = _brandName <=> rhs._brandName;
-  if (cmpBrand != 0) return cmpBrand;
+  if( cmpBrand != 0 ) return cmpBrand;
 
   if( floating_point_is_equal(_price, rhs._price) )
     return std::weak_ordering::equivalent;
