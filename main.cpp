@@ -1,27 +1,36 @@
 #include <iostream>
-#include <vector>
-#include <memory>
+#include <sstream>
 #include "GroceryItem.hpp"
 
-int main() {
-    std::vector<std::unique_ptr<GroceryItem>> shoppingCart;
+int main()
+{
+    // Construct some items
+    GroceryItem item1("Kit Kat Bar", "Nestle", "00003400012345", 1.25);
+    GroceryItem item2("Reese Peanut Butter Cups", "Hershey", "00034000020706", 2.49);
 
-    std::cout << "Welcome to Kroger.  Place grocery items into your shopping cart by entering each item's information.\n"
-              << "   enclose string entries in quotes, separate fields with comas\n"
-              << "   for example:  \"00016000306707\", \"Betty Crocker\", \"Betty Crocker Double Chocolate Chunk Cookie Mix\", 17.19\n"
-              << "   Enter CTL-Z (Windows) or CTL-D (Linux) to quit\n\n";
+    // Print them
+    std::cout << "Item 1: " << item1 << "\n"
+              << "Item 2: " << item2 << "\n\n";
 
-    GroceryItem item;
-    std::cout << "Enter UPC, Product Brand, Product Name, and Price\n";
-    while (std::cin >> item) {
-        shoppingCart.push_back(std::make_unique<GroceryItem>(item));
-        std::cout << "Item added to shopping cart: " << item << "\n\n";
-        std::cout << "Enter UPC, Product Brand, Product Name, and Price\n";
+    // Compare them
+    if(item1 < item2)
+        std::cout << "Item1 <  Item2\n";
+    else if(item1 > item2)
+        std::cout << "Item1 >  Item2\n";
+    else
+        std::cout << "Item1 == Item2\n";
+
+    // Read a new item from a string stream
+    std::istringstream in("\"000111222333\", \"Mars\", \"Snickers\", 1.99");
+    GroceryItem item3;
+    if(in >> item3)
+    {
+        std::cout << "\nSuccessfully read an item:\n";
+        std::cout << "Item 3: " << item3 << "\n";
     }
-
-    std::cout << "\n\nHere is an itemized list of the items in your shopping cart:\n";
-    for (auto it = shoppingCart.rbegin(); it != shoppingCart.rend(); ++it) {
-        std::cout << **it << '\n';
+    else
+    {
+        std::cout << "\nFailed to read item3!\n";
     }
 
     return 0;
