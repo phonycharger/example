@@ -5,7 +5,7 @@
 int main()
 {
     // Construct some items
-    GroceryItem item1("Kit Kat Bar", "Nestle", "00003400012345", 1.25);
+    const GroceryItem item1("Kit Kat Bar", "Nestle", "00003400012345", 1.25);
     GroceryItem item2("Reese Peanut Butter Cups", "Hershey", "00034000020706", 2.49);
 
     // Print them
